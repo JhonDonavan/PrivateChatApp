@@ -49,7 +49,21 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                 usuario.setNome(nome.getText().toString());
                 usuario.setEmail(email.getText().toString());
                 usuario.setSenha(senha.getText().toString());
-                cadastrarUsuario();
+
+                if((nome.getText().length() > 0) && (email.getText().length() > 0) && (senha.getText().length() > 0)){
+                    cadastrarUsuario();
+                }else{
+                    if(nome.getText().length() == 0){
+                        nome.setError("Favor digite um nome de usuário");
+                    }
+                    if(email.getText().length() == 0){
+                        email.setError("Favor digite um e-mail");
+                    }
+                    if(senha.getText().length() == 0){
+                        senha.setError("Favor digite uma senha de acesso");
+                    }
+                }
+
             }
         });
     }
@@ -80,10 +94,13 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                         throw task.getException();
                     } catch (FirebaseAuthWeakPasswordException e){
                         erroExcecao = "Digite uma senha mais forte, contendo mais caracteres com letras e números";
+                        senha.setError("Favor digitar uma senha mais forte");
                     } catch (FirebaseAuthInvalidCredentialsException e) {
                         erroExcecao = "O e-mail  digitado é inválido.";
+                        email.setError("O e-mail digitado é inválido");
                     } catch (FirebaseAuthUserCollisionException e) {
                         erroExcecao = "O e-mail já está em uso no app";
+                        email.setError("O e-mail já está em uso no app");
                     } catch (Exception e) {
                         erroExcecao = "Erro ao efetuar o cadastro!";
                     }
