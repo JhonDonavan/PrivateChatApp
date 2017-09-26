@@ -48,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        verificarUsuarioLogado();
+
         email = (EditText) findViewById(R.id.edit_login_email);
         senha = (EditText) findViewById(R.id.edit_login_senha);
         botaoLogar = findViewById(R.id.bt_logar);
@@ -77,6 +79,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void verificarUsuarioLogado(){
+        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        if(autenticacao.getCurrentUser() !=  null){
+            abrirTelaPrincipal();
+        }
+    }
+
     private void validarLogin(){
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         autenticacao.signInWithEmailAndPassword(
@@ -86,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    abrirTelaPrincipal();
                     Toast.makeText(LoginActivity.this, "Sucesso ao realizar  o login!!", Toast.LENGTH_LONG).show();
                 }else{
 
@@ -106,6 +116,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void abrirTelaPrincipal(){
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void abrirCadastroUsuario(View view){
